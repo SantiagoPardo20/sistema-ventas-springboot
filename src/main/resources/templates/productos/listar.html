@@ -3,39 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>Productos</title>
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-<body class="container mt-4">
 
-<h2>Listado de Productos</h2>
+<body class="bg-light">
 
-<a th:href="@{/productos/nuevo}" class="btn btn-primary mb-3">Nuevo Producto</a>
+<!-- NAVBAR -->
+<div th:replace="layout/navbar :: body"></div>
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Stock</th>
-        </tr>
-    </thead>
-	<tbody>
-	    <tr th:each="p : ${productos}">
-	        <td th:text="${p.id}"></td>
-	        <td th:text="${p.nombre}"></td>
-	        <td th:text="${p.precio}"></td>
-	        <td th:text="${p.stock}"></td>
+<div class="container" style="margin-top: 100px;">
 
-	        <td>
-	            <a th:href="@{/productos/eliminar/{id}(id=${p.id})}"
-	               class="btn btn-danger btn-sm">
-	                Eliminar
-	            </a>
-	        </td>
-	    </tr>
-	</tbody>
-</table>
+    <!-- ALERTA -->
+    <div th:if="${mensaje}"
+         id="alerta"
+         class="alert alert-dismissible fade show shadow-sm"
+         th:classappend="' alert-' + ${tipo}"
+         role="alert">
+        <i class="bi bi-info-circle me-1"></i>
+        <span th:text="${mensaje}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- CARD -->
+    <div class="card shadow border-0">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="bi bi-box-seam"></i> Productos
+            </h5>
+            <a th:href="@{/productos/nuevo}" class="btn btn-success btn-sm">
+                <i class="bi bi-plus-circle"></i> Nuevo
+            </a>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Producto</th>
+							<th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th class="text-center" sec:authorize="hasRole('ADMIN')">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${productos}">
+                            <td th:text="${p.id}"></td>
+
+                            <td class="fw-semibold" th:text="${p.nombre}"></td>
+							<td th:text="${p.descripcion}"></td>
+
+                            <td>
+                                $<span th:text="${#numbers.formatDecimal(p.precio,1,2)}"></span>
+                            </td>
+
+                            <td>
+                                <span class="badge"
+                                      th:classappend="${p.stock > 10} ? ' bg-success' : ' bg-warning text-dark'"
+                                      th:text="${p.stock}">
+                                </span>
+                            </td>
+
+                            <td class="text-center" sec:authorize="hasRole('ADMIN')">
+                                <a th:href="@{/productos/editar/{id}(id=${p.id})}"
+                                   class="btn btn-outline-warning btn-sm me-1"
+                                   title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+
+                                <a th:href="@{/productos/eliminar/{id}(id=${p.id})}"
+                                   class="btn btn-outline-danger btn-sm"
+                                   title="Eliminar"
+                                   onclick="return confirm('¿Eliminar producto?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(productos)}">
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="bi bi-inbox"></i> No hay productos registrados
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    setTimeout(() => {
+        const alert = document.getElementById('alerta');
+        if (alert) {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }
+    }, 3000);
+</script>
 
 </body>
 </html>

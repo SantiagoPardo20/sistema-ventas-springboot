@@ -2,50 +2,74 @@
 package com.example.personalidad.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+
 
 @Entity
 public class Producto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String nombre;
-    private double precio;
-    private int stock;
+	@NotBlank(message = "El nombre es obligatorio")
+	private String nombre;
+
+	@NotNull
+	@Positive(message = "El precio debe ser mayor a 0")
+	private Double precio;
+	
+	@NotBlank(message = "La descripción es obligatoria")
+    @Column(length = 500)
+    private String descripcion;
+
+	@NotNull
+	@Positive(message = "El stock debe ser mayor a 0")
+	private Integer stock;
 
     public Producto() {
     }
 
-    public Long getId() {
-        return id;
-    }
+	public String getDescripcion() {
+		return descripcion;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 
-    public String getNombre() {
-        return nombre;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public double getPrecio() {
-        return precio;
-    }
+	public String getNombre() {
+		return nombre;
+	}
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
-    public int getStock() {
-        return stock;
-    }
+	public Double getPrecio() {
+		return precio;
+	}
 
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
+	public void setPrecio(Double precio) {
+		this.precio = precio;
+	}
+
+	public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
+	}
+
+    
 }

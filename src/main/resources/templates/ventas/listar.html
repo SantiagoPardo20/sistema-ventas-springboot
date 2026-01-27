@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ventas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div th:replace="~{layout/navbar :: body}"></div>
+
+<!-- CONTENIDO -->
+<div class="container" style="margin-top: 90px;">
+
+    <div class="card shadow-lg border-0">
+
+        <!-- HEADER -->
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                📊 Historial de Ventas
+            </h5>
+            <a th:href="@{/ventas/nueva}" class="btn btn-success btn-sm">
+                ➕ Nueva Venta
+            </a>
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Total</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="v : ${ventas}">
+                            <td th:text="${v.id}"></td>
+
+                            <!-- FECHA -->
+                            <td th:text="${#temporals.format(v.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+
+                            <!-- USUARIO -->
+                            <td th:text="${v.usuario.nombre}"></td>
+                            <!-- o -->
+                            <!-- <td th:text="${v.usuario.nombre}"></td> -->
+
+                            <!-- TOTAL -->
+                            <td class="fw-bold text-success">
+                                $ <span th:text="${v.total}"></span>
+                            </td>
+
+                            <!-- ACCIONES -->
+                            <td>
+                                <a th:href="@{/ventas/detalle/{id}(id=${v.id})}"
+                                   class="btn btn-info btn-sm">
+                                   🔍 Detalles
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- SIN VENTAS -->
+                        <tr th:if="${ventas.empty}">
+                            <td colspan="5" class="text-muted py-4">
+                                No hay ventas registradas
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

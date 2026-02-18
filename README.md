@@ -1,4 +1,4 @@
-# Sistema de Inventario - Spring Boot
+# Sistema de ventas - Spring Boot
 
 ## 📌 Descripción
 Aplicación web para la gestión de productos con autenticación y control de roles.
